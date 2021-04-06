@@ -34,4 +34,12 @@ Route::get("/about", function(){
 
 Route::get("/services", "App\Http\Controllers\ServicesController@index");
 
+Route::post("/services", "App\Http\Controllers\ServicesController@store");
+
+Route::get("/services/create", "App\Http\Controllers\ServicesController@create");
+
 Route::get("/services/{service}", "App\Http\Controllers\ServicesController@show");
+
+Route::get("/services/{service}/edit", "App\Http\Controllers\ServicesController@edit");
+
+Route::put("/services/{service}", "App\Http\Controllers\ServicesController@update");
