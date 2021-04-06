@@ -6,7 +6,7 @@
         @foreach($services as $service)
             <div class="content">
                 <h2>
-                    <a href="/services/{{ $service->id}}">{{ $service->title }}</a>
+                    <a href="{{ route("services.show", $service) }}" {{-- href="/services/{{ $service->id}}" --}}>{{ $service->title }}</a>
                 </h2>
                 <p>{{ $service->body }}</p>
             </div>

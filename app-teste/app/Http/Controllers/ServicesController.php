@@ -12,8 +12,13 @@ class ServicesController extends Controller
         return view("services.index", ["services" => $services]);
     }
 
-    public function show($id){
-        $service = Services::find($id);
+/*     public function show($id){
+        $service = Services::findOrFail($id);
+        
+        return view("services.show", ["service" => $service]);
+    } */
+
+    public function show(Services $service){
         return view("services.show", ["service" => $service]);
     }
 
@@ -21,41 +26,29 @@ class ServicesController extends Controller
         return view("services.create");
     }
 
-    public function store(){
+    public function store(Services $service){
 
-        request()->validate([
-            "title" => "required"/* ["required", "min:3", "max:255"] */,
-            "body" => "required"
-        ]);
-
-        $service = new Services();
-        $service->title = request("title");
-        $service->body = request("body");
-        $service->save();
-
-        return redirect("/services");
+       Services::create($this->validateArticle());
+       return redirect(route("services.index"));
+        /* return redirect("/services"); */
     }
 
-    public function edit($id){
-        $service = Services::find($id);
+    public function edit(Services $service){
 
         return view("services.edit", compact("service"));
     }
 
-    public function update($id){
+    public function update(Services $service){
 
-        request()->validate([
+        $service->update($this->validateArticle());
+
+        return redirect("/services/" . $service->id);
+    }
+
+    public function validateArticle(){
+        return request()->validate([
             "title" => "required"/* ["required", "min:3", "max:255"] */,
             "body" => "required"
         ]);
-        
-        $service = Services::find($id);
-
-        $service->title = request("title");
-        $service->body = request("body");
-
-        $service->save();
-
-        return redirect("/services/" . $service->id);
     }
 }
