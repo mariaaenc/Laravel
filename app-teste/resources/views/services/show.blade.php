@@ -11,4 +11,10 @@
             {{ $service->body }}
     </div>
 
+    <p style="margin-left: 9em">
+        @foreach ($service->tags as $tag)
+            <a {{-- href="/services?tag={{ $tag->name }}" --}}
+                href="{{ route("services.index", ["tag" => $tag->name]) }}">{{ $tag->name }}</a>
+        @endforeach
+    </p>
 @endsection

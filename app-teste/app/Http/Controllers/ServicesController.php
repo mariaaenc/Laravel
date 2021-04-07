@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Services;
+use App\Models\Tag;
 
 class ServicesController extends Controller
 {
     public function index(){
-        $services = Services::latest()->get();
+
+        if(request("tag")){
+            $services = Tag::where("name", request("tag"))->firstOrFail()->services;
+        }
+        else{
+            $services = Services::latest()->get();
+        }
+        
         return view("services.index", ["services" => $services]);
     }
 
@@ -23,12 +31,19 @@ class ServicesController extends Controller
     }
 
     public function create(){
-        return view("services.create");
+        return view("services.create", [
+            "tags" => Tag::all()
+        ]);
     }
 
-    public function store(Services $service){
+    public function store(){
+       $this->validateService();
+       $service = new Services(request(["title", "body"]));
+       $service->user_id = 1;
+       $service->save();
 
-       Services::create($this->validateArticle());
+       $service->tags()->attach(request("tags")); //attach = anexa 
+       /* Services::create($this->validateService()); */
        return redirect(route("services.index"));
         /* return redirect("/services"); */
     }
@@ -40,15 +55,16 @@ class ServicesController extends Controller
 
     public function update(Services $service){
 
-        $service->update($this->validateArticle());
+        $service->update($this->validateService());
 
         return redirect("/services/" . $service->id);
     }
 
-    public function validateArticle(){
+    public function validateService(){
         return request()->validate([
             "title" => "required"/* ["required", "min:3", "max:255"] */,
-            "body" => "required"
+            "body" => "required",
+            "tags" => "exists:tags,id"
         ]);
     }
 }

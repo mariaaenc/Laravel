@@ -15,11 +15,11 @@ class Services extends Model
         return route("services.show", $this);
     }
 
-    public function author(){
+    public function user(){
         return $this->belongsTo(User::class, "user_id");
     }
 
     public function tags(){
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 }
