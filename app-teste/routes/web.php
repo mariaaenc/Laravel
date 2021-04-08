@@ -43,3 +43,16 @@ Route::get("/services/{service}", "App\Http\Controllers\ServicesController@show"
 Route::get("/services/{service}/edit", "App\Http\Controllers\ServicesController@edit");
 
 Route::put("/services/{service}", "App\Http\Controllers\ServicesController@update");
+
+
+Route::get('/', function () {
+    $container = new \App\Models\Container();
+
+    $container->bind('example', function() {
+        return new \App\Models\Example();
+    });
+
+   $example =  $container->resolve("example");
+
+    ddd($container);
+});
