@@ -11,7 +11,9 @@ class Post extends Model
 
     protected $guarded = [];
 
-    //protected $with = ['category', 'author'];
+    protected $with = ['category', 'author'];
+
+    //Pode usar without('category') em uma consulta para não mostrar 
 
     public function category(){
         return $this->belongsTo(Category::class);
