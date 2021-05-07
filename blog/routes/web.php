@@ -15,28 +15,19 @@ use App\Models\Post;
 */
 
 Route::get('/', function () {
-/* $files = File::files(resource_path("posts"));
-    
-    $posts = collect($files)
-        ->map(function ($file) {
-            $document = YamlFrontMatter::parseFile($file);
-
-            return new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-                $document->slug
-            );
-        });
- */
     return view('posts', [
         "posts" => Post::all()
     ]);
 });
 
-Route::get('posts/{post}', function ($id) {
+Route::get('posts/{post:slug}', function (Post $post) {
     return view("post", [
-        'post' => Post::findOrFail($id)
+        'post' => $post
+    ]);
+});
+
+Route::get('/categories/{category:slug}', function () {
+    return view('posts', [
+        "posts" => Post::all()
     ]);
 });
